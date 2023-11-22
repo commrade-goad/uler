@@ -75,7 +75,7 @@ int main() {
             uler_snapshot.erase(uler_snapshot.begin());
         }
         mvprintw(uler.y, uler.x, "@");
-        if (current_time_interval.count() >= 0.3) {
+        if (current_time_interval.count() >= 0.2) {
             uler_snapshot.push_back({uler.x, uler.y});
             switch (move) {
                 case RIGHT: {
@@ -119,11 +119,9 @@ int main() {
         }
 
         for (int j = 0; j < (int) uler_snapshot.size(); j++) {
-            if (j > 0) {
-                if (uler.x == uler_snapshot[j].x && uler.y == uler_snapshot[j].y) {
-                    endwin();
-                    return 0;
-                }
+            if (uler.x == uler_snapshot[j].x && uler.y == uler_snapshot[j].y) {
+                endwin();
+                return 0;
             }
         }
 
