@@ -6,6 +6,7 @@
 
 #define BOARD_X 20
 #define BOARD_Y 10
+#define SPEED 0.2
 
 enum Movement {
     RIGHT,
@@ -75,7 +76,7 @@ int main() {
             uler_snapshot.erase(uler_snapshot.begin());
         }
         mvprintw(uler.y, uler.x, "@");
-        if (current_time_interval.count() >= 0.2) {
+        if (current_time_interval.count() >= SPEED) {
             uler_snapshot.push_back({uler.x, uler.y});
             switch (move) {
                 case RIGHT: {
