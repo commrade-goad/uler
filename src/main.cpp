@@ -35,20 +35,25 @@ int gen_rand_num(size_t min, size_t max) {
     return distr(gen);
 }
 
-Coords gen_food() {
+Coords gen_food(std::vector<Coords> uler_pos) {
     Coords result = {
         .x = gen_rand_num(1, BOARD_X-2),
         .y = gen_rand_num(1, BOARD_Y-2)
     };
+    for (Coords body: uler_pos) {
+        if (result.x == body.x && result.y == body.y) {
+            gen_food(uler_pos);
+        }
+    }
     return result;
 }
 
 int main() {
     init_curses();
     Coords uler = {BOARD_X/2,BOARD_Y/2};
-    Coords food = gen_food();
-    size_t uler_len = 0;
+    size_t uler_len = 30;
     std::vector<Coords> uler_snapshot;
+    Coords food = gen_food(uler_snapshot);
     int ch;
     Movement move = RIGHT;
     auto movement = std::chrono::high_resolution_clock::now();
@@ -68,7 +73,7 @@ int main() {
         }
         mvprintw(food.y, food.x, "$");
         if (uler.x == food.x && uler.y == food.y) {
-            food = gen_food();
+            food = gen_food(uler_snapshot);
             uler_len += 1;
         }
 
