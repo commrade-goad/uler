@@ -1,4 +1,3 @@
-#include <iostream>
 #include <curses.h>
 #include <chrono>
 #include <vector>
@@ -6,7 +5,7 @@
 
 #define BOARD_X 20
 #define BOARD_Y 10
-#define SPEED 0.2
+#define SPEED 0.17
 
 enum Movement {
     RIGHT,
@@ -48,10 +47,20 @@ Coords gen_food(std::vector<Coords> uler_pos) {
     return result;
 }
 
+bool is_opposite_direction(int len, Movement dir1, Movement dir2) {
+    if (len >= 1) {
+        return (dir1 == RIGHT && dir2 == LEFT) ||
+        (dir1 == LEFT && dir2 == RIGHT) ||
+        (dir1 == UP && dir2 == DOWN) ||
+        (dir1 == DOWN && dir2 == UP);
+    }
+    return false;
+}
+
 int main() {
     init_curses();
     Coords uler = {BOARD_X/2,BOARD_Y/2};
-    size_t uler_len = 30;
+    size_t uler_len = 0;
     std::vector<Coords> uler_snapshot;
     Coords food = gen_food(uler_snapshot);
     int ch;
@@ -136,19 +145,27 @@ int main() {
         ch = getch();
         switch (ch) {
             case 'w':{
-                move = UP;
+                if (!is_opposite_direction(uler_len, move, UP)) {
+                    move = UP;
+                }
                 break;
             }
             case 'a':{
-                move = LEFT;
+                if (!is_opposite_direction(uler_len, move, LEFT)) {
+                    move = LEFT;
+                }
                 break;
             }
             case 's':{
-                move = DOWN;
+                if (!is_opposite_direction(uler_len, move, DOWN)) {
+                    move = DOWN;
+                }
                 break;
             }
             case 'd':{
-                move = RIGHT;
+                if (!is_opposite_direction(uler_len, move, RIGHT)) {
+                    move = RIGHT;
+                }
                 break;
             }
             case 'q': {
